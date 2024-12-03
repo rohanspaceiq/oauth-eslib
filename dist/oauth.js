@@ -461,7 +461,7 @@ function OAuth(oaToken, oaHost, oaHash, oaLog, $q, $http) {
         }
 
         function iabLoadError(event) {
-          if (!isAppSite(event.url)) {
+          if (!this.isAppSite(event.url) && event.url !== 'https://federation.api.iofficeconnect.com/sp/ACS.saml2') {
             oaLog.debug('OAuth.login:InAppBrowser', 'Error loading: ' + event.url);
             loadSiteTask.reject("load_error");
             loadTokenTask.reject();
