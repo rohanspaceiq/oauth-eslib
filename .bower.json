@@ -1,0 +1,34 @@
+{
+  "name": "iOffice-OAuth",
+  "homepage": "https://github.com/iOffice/iOffice-OAuth",
+  "authors": [
+    "iOffice"
+  ],
+  "description": "OAuth Lib For Linking Mobile Apps to iOffice",
+  "main": "dist/oauth.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "oauth"
+  ],
+  "license": "PRIVATE",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "demo",
+    "gulpfile.js"
+  ],
+  "_release": "41343a363a",
+  "_resolution": {
+    "type": "commit",
+    "commit": "41343a363acde51098d8893934bf9da7530c7090"
+  },
+  "_source": "https://github.com/iOffice/oauth-eslib.git",
+  "_target": "41343a363acde51098d8893934bf9da7530c7090",
+  "_originalSource": "git+https://github.com/iOffice/oauth-eslib"
+}

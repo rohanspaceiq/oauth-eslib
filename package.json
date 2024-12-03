@@ -1,0 +1,15 @@
+{
+  "name": "IOfficeOAuth",
+  "version": "0.0.2",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-jshint": "^1.9.2",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^1.3.3",
+    "gulp-uglify": "^1.1.0",
+    "gulp-wrap": "^0.11.0",
+    "gulp-if": "^1.2.5"
+  }
+}
