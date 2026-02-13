@@ -216,24 +216,28 @@ function OAuth(oaToken, oaHost, oaHash, oaLog, $q, $http) {
 
       };
 
-    oaLog.debug('OAuth.login', 'Checking for site availability...');
-    $http({
-      method: 'GET',
-      url: url
-    }).then(function() {
-      oaLog.debug('OAuth.login', 'Site is active. Attempting login.');
-      if (isMobile) {
-        var ref = window.open(url, '_blank', 'location=no,hidden=yes,toolbarposition=top,closebuttoncaption=Cancel');
-        setupInAppBrowserListeners(ref, task.loadToken, task.loadSite, task.exitSite);
-      } else {
+    // For mobile environments, skip the HTTP pre-check as it can fail due to CORS/network policies
+    // The InAppBrowser will handle loading errors itself
+    if (isMobile) {
+      oaLog.debug('OAuth.login', 'Mobile environment detected, opening InAppBrowser directly...');
+      var ref = window.open(url, '_blank', 'location=no,hidden=yes,toolbarposition=top,closebuttoncaption=Cancel');
+      setupInAppBrowserListeners(ref, task.loadToken, task.loadSite, task.exitSite);
+    } else {
+      // For non-mobile (browser), do the pre-check
+      oaLog.debug('OAuth.login', 'Checking for site availability...');
+      $http({
+        method: 'GET',
+        url: url
+      }).then(function() {
+        oaLog.debug('OAuth.login', 'Site is active. Attempting login.');
         throw 'Desktop implementation not yet done.';
-      }
-    }, function(response) {
-      oaLog.debug('OAuth.login', 'Failed to load the host site.');
-      task.loadSite.reject(response);
-      task.loadToken.reject();
-      task.exitSite.reject();
-    });
+      }, function(response) {
+        oaLog.debug('OAuth.login', 'Failed to load the host site.');
+        task.loadSite.reject(response);
+        task.loadToken.reject();
+        task.exitSite.reject();
+      });
+    }
 
     return {
       loadSite: task.loadSite.promise,
