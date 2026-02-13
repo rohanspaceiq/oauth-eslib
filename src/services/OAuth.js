@@ -136,7 +136,7 @@ function OAuth(oaToken, oaHost, oaHash, oaLog, $q, $http) {
         response_type: params.responseType || 'code'
       }),
       redirectUri = oaHost.redirectUri,
-      isMobile = (document.location.href.indexOf('file://') === 0),
+      isMobile = (typeof window.cordova !== 'undefined' || document.location.href.indexOf('file://') === 0),
       isHostSite = function(url) {
         return (url.indexOf(oaHost.site) === 0);
       },
