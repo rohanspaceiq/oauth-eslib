@@ -461,7 +461,7 @@ function OAuth(oaToken, oaHost, oaHash, oaLog, $q, $http) {
         }
 
         function iabLoadError(event) {
-          if (!this.isAppSite(event.url) && event.url !== 'https://federation.api.iofficeconnect.com/sp/ACS.saml2') {
+          if (!isAppSite(event.url) && event.url !== 'https://federation.api.iofficeconnect.com/sp/ACS.saml2') {
             oaLog.debug('OAuth.login:InAppBrowser', 'Error loading: ' + event.url);
             loadSiteTask.reject("load_error");
             loadTokenTask.reject();
@@ -485,24 +485,25 @@ function OAuth(oaToken, oaHost, oaHash, oaLog, $q, $http) {
 
       };
 
-    oaLog.debug('OAuth.login', 'Checking for site availability...');
-    $http({
-      method: 'GET',
-      url: url
-    }).then(function() {
-      oaLog.debug('OAuth.login', 'Site is active. Attempting login.');
-      if (isMobile) {
-        var ref = window.open(url, '_blank', 'location=no,hidden=yes,toolbarposition=top,closebuttoncaption=Cancel');
-        setupInAppBrowserListeners(ref, task.loadToken, task.loadSite, task.exitSite);
-      } else {
+    if (isMobile) {
+      oaLog.debug('OAuth.login', 'Mobile environment detected. Opening InAppBrowser directly.');
+      var ref = window.open(url, '_blank', 'location=no,hidden=yes,toolbarposition=top,closebuttoncaption=Cancel');
+      setupInAppBrowserListeners(ref, task.loadToken, task.loadSite, task.exitSite);
+    } else {
+      oaLog.debug('OAuth.login', 'Checking for site availability...');
+      $http({
+        method: 'GET',
+        url: url
+      }).then(function() {
+        oaLog.debug('OAuth.login', 'Site is active. Attempting login.');
         throw 'Desktop implementation not yet done.';
-      }
-    }, function(response) {
-      oaLog.debug('OAuth.login', 'Failed to load the host site.');
-      task.loadSite.reject(response);
-      task.loadToken.reject();
-      task.exitSite.reject();
-    });
+      }, function(response) {
+        oaLog.debug('OAuth.login', 'Failed to load the host site.');
+        task.loadSite.reject(response);
+        task.loadToken.reject();
+        task.exitSite.reject();
+      });
+    }
 
     return {
       loadSite: task.loadSite.promise,
